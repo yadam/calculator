@@ -17,12 +17,22 @@ describe('String Calculator', () => {
     expect(getNodeText(result)).toEqual('20');
   });
 
-  it('parses a double operand', async () => {
+  it('parses double operands', async () => {
     const { getByPlaceholderText, getByText } = render(<App />);
     const result = getByText(/0/i);
     const input = getByPlaceholderText(/comma delimited/i);
     fireEvent.change(input, { target: { value: '1,5000' } });
     expect(getNodeText(result)).toEqual('5001');
+  });
+
+  it('parses multiple operands', async () => {
+    const { getByPlaceholderText, getByText } = render(<App />);
+    const result = getByText(/0/i);
+    const input = getByPlaceholderText(/comma delimited/i);
+    fireEvent.change(input, {
+      target: { value: '1,2,3,4,5,6,7,8,9,10,11,12' },
+    });
+    expect(getNodeText(result)).toEqual('78');
   });
 
   it('parses a negative operand', async () => {
@@ -47,15 +57,5 @@ describe('String Calculator', () => {
     const input = getByPlaceholderText(/comma delimited/i);
     fireEvent.change(input, { target: { value: '5,tytyt' } });
     expect(getNodeText(result)).toEqual('5');
-  });
-
-  it('displays an error when too many operands are given', async () => {
-    const { getByPlaceholderText, getByText } = render(<App />);
-    const result = getByText(/0/i);
-    const input = getByPlaceholderText(/comma delimited/i);
-    fireEvent.change(input, { target: { value: '1,2,3' } });
-    expect(getNodeText(result)).toEqual('0');
-    const error = getByText(/too many/i);
-    expect(error).toBeInTheDocument();
   });
 });
