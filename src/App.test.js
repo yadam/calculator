@@ -48,14 +48,6 @@ describe('String Calculator', () => {
     expect(getNodeText(result)).toEqual('6');
   });
 
-  it('parses a negative operand', async () => {
-    const { getByPlaceholderText, getByText } = render(<App />);
-    const result = getByText(/0/i);
-    const input = getByPlaceholderText(/comma or newline delimited/i);
-    fireEvent.change(input, { target: { value: '4,-3' } });
-    expect(getNodeText(result)).toEqual('1');
-  });
-
   it('parses a missing operand', async () => {
     const { getByPlaceholderText, getByText } = render(<App />);
     const result = getByText(/0/i);
@@ -70,5 +62,20 @@ describe('String Calculator', () => {
     const input = getByPlaceholderText(/comma or newline delimited/i);
     fireEvent.change(input, { target: { value: '5,tytyt' } });
     expect(getNodeText(result)).toEqual('5');
+  });
+
+  it('displays an error for negative operands', async () => {
+    const { getByPlaceholderText, getByText } = render(<App />);
+    const result = getByText(/0/i);
+    const input = getByPlaceholderText(/comma or newline delimited/i);
+    fireEvent.change(input, {
+      target: { value: '1,2,-3,-4,5' },
+    });
+    expect(getNodeText(result)).toEqual('0');
+    const error = getByText(/negative numbers/i);
+    expect(error).toBeInTheDocument();
+    expect(getNodeText(error)).toEqual(
+      'Negative numbers not allowed - [ -3, -4 ]',
+    );
   });
 });
