@@ -21,8 +21,8 @@ describe('String Calculator', () => {
     const { getByPlaceholderText, getByText } = render(<App />);
     const result = getByText(/0/i);
     const input = getByPlaceholderText(/comma or newline delimited/i);
-    fireEvent.change(input, { target: { value: '1,5000' } });
-    expect(getNodeText(result)).toEqual('5001');
+    fireEvent.change(input, { target: { value: '1,500' } });
+    expect(getNodeText(result)).toEqual('501');
   });
 
   it('parses multiple operands', async () => {
@@ -62,6 +62,14 @@ describe('String Calculator', () => {
     const input = getByPlaceholderText(/comma or newline delimited/i);
     fireEvent.change(input, { target: { value: '5,tytyt' } });
     expect(getNodeText(result)).toEqual('5');
+  });
+
+  it('also considers operands greater than 1000 to be invalid', async () => {
+    const { getByPlaceholderText, getByText } = render(<App />);
+    const result = getByText(/0/i);
+    const input = getByPlaceholderText(/comma or newline delimited/i);
+    fireEvent.change(input, { target: { value: '2,1001,6' } });
+    expect(getNodeText(result)).toEqual('8');
   });
 
   it('displays an error for negative operands', async () => {

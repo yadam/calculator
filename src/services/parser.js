@@ -3,18 +3,27 @@ export function parse(input) {
   const badOperands = [];
   const operands = input.split(/[,\n]/);
   operands.forEach(o => {
-    const operand = parseInt(o) || 0;
+    let operand = parseInt(o) || 0;
+
+    // Deny negative numbers
     if (operand < 0) {
       badOperands.push(operand);
       return;
     }
+
+    // Numbers greater than 1000 are invalid
+    if (operand > 1000) {
+      operand = 0;
+    }
     result += operand;
   });
+
   if (badOperands.length > 0) {
     throw new Error(
       `Negative numbers not allowed - [ ${badOperands.join(', ')} ]`,
     );
   }
+
   return result;
 }
 
