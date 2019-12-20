@@ -7,10 +7,10 @@ export const Input = memo(({ errorMessage, onChange: parentOnChonge }) => {
   const onChangeHandler = e => parentOnChonge(e.target.value);
   return (
     <>
-      <input
+      <textarea
         className={styles.input}
         onChange={onChangeHandler}
-        placeholder="Enter your comma delimited string"
+        placeholder="Enter your comma or newline delimited string"
       />
       <ErrorMessage message={errorMessage} />
     </>
