@@ -1,7 +1,26 @@
-export function parse(input) {
+export function parse(i) {
   let result = 0;
+  let input = i;
+  const delimiters = [',', '\n'];
   const badOperands = [];
-  const operands = input.split(/[,\n]/);
+  // matches //x\n where x is a custom delimiter and then captures the rest
+  // of the string for further parsing
+  const captureGroups = input.match(/^\/\/(.)\n(.*)$/is);
+  if (captureGroups && captureGroups.length > 1) {
+    // the first captured group is in index 1
+    const newDelimiter = captureGroups[1];
+    // escape regex special characters (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions)
+    const escapedDelimiter = newDelimiter.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&',
+    );
+    delimiters.push(escapedDelimiter);
+    // the rest of the string is in index 2
+    input = captureGroups[2];
+  }
+
+  // join the delimiters together and pass that as the split regex
+  const operands = input.split(new RegExp(`[${delimiters.join('')}]`));
   operands.forEach(o => {
     let operand = parseInt(o) || 0;
 
