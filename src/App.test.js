@@ -48,17 +48,17 @@ describe('String Calculator', () => {
     expect(getNodeText(result)).toEqual('6');
   });
 
-  it('parses multiple operands with custom delimiters', async () => {
+  it('parses multiple operands with custom delimiters of any length', async () => {
     const { getByPlaceholderText, getByText } = render(<App />);
     const result = getByText(/0/i);
     const input = getByPlaceholderText(/comma or newline delimited/i);
     fireEvent.change(input, {
       target: {
-        value: `//#
-        2#5`,
+        value: `//[***]
+        11***22***33`,
       },
     });
-    expect(getNodeText(result)).toEqual('7');
+    expect(getNodeText(result)).toEqual('66');
   });
 
   it('parses multiple operands with custom delimiters and invalid characters', async () => {
